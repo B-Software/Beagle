@@ -1,4 +1,4 @@
-package org.bsoftware.ward;
+package org.bsoftware.beagle.client;
 
 import lombok.Getter;
 import org.springframework.boot.ApplicationArguments;
