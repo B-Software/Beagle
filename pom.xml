@@ -14,6 +14,20 @@
         <version>2.3.3.RELEASE</version>
     </parent>
 
+    <!-- project properties -->
+    <properties>
+        <lombokVersion>1.18.12</lombokVersion>
+    </properties>
+
+    <!-- project properties -->
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombokVersion}</version>
+        </dependency>
+    </dependencies>
+
     <!-- project modules -->
     <modules>
         <module>client</module>

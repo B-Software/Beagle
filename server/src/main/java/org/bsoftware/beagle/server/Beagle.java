@@ -14,7 +14,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 public class Beagle extends SpringBootServletInitializer
 {
     /**
-     * Entry point of Ward application
+     * Entry point of Beagle application
      *
      * @param args Spring Boot application arguments
      */
