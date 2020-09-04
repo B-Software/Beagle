@@ -1,20 +1,24 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <project xmlns = "http://maven.apache.org/POM/4.0.0" xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- module options -->
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>server</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
+
+    <!-- parent pom -->
     <parent>
         <groupId>org.b-software</groupId>
         <artifactId>beagle</artifactId>
         <version>0.0.1</version>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>server</artifactId>
-    <version>0.0.1</version>
-    <packaging>jar</packaging>
-
+    <!-- module properties -->
     <properties>
         <lombokVersion>1.18.12</lombokVersion>
     </properties>
 
+    <!-- module dependencies -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -31,6 +35,7 @@
         </dependency>
     </dependencies>
 
+    <!-- module build plugins -->
     <build>
         <plugins>
             <plugin>
