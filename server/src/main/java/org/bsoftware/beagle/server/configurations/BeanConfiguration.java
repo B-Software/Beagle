@@ -1,5 +1,6 @@
 package org.bsoftware.beagle.server.configurations;
 
+import org.apache.tika.Tika;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -24,5 +25,14 @@ public class BeanConfiguration
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         return httpHeaders;
+    }
+
+    /**
+     * @return Tika object as bean
+     */
+    @Bean
+    public Tika tika()
+    {
+        return new Tika();
     }
 }

@@ -1,6 +1,7 @@
 package org.bsoftware.beagle.server.services;
 
 import org.bsoftware.beagle.server.dto.Dto;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service interface makes to all services return dto object
@@ -15,36 +16,32 @@ public interface Service
      *
      * @param <T> generic type, which extends Dto class
      * @return Dto object
-     * @throws Exception unexpected exception, which will forwarded to controller
      */
-    default <T extends Dto> T get() throws Exception
+    default <T extends Dto> T get()
     {
         return null;
     }
 
     /**
-     * Get info from the service, for corresponding parameter
+     * Get info from the service, for String parameter
      *
+     * @param parameter String type parameter
      * @param <T> generic type, which extends Dto class
-     * @param parameter String parameter
      * @return Dto object
-     * @throws Exception unexpected exception, which will forwarded to controller
      */
-    default <T extends Dto> T get(String parameter) throws Exception
+    default <T extends Dto> T get(String parameter)
     {
         return null;
     }
 
     /**
-     * Post data to service and get the response
+     * Uploads MultipartFile to server and get the response
      *
-     * @param dto data to post
+     * @param multipartFile data to post
      * @param <T> generic type, which extends Dto class
-     * @param <K> generic type, which extends Dto class
-     * @return @return Dto object
-     * @throws Exception unexpected exception, which will forwarded to controller
+     * @return Dto object
      */
-    default <T extends Dto, K extends Dto> K post(T dto) throws Exception
+    default <T extends Dto> T post(MultipartFile multipartFile) throws Exception
     {
         return null;
     }

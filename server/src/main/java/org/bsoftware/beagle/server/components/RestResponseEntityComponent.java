@@ -1,5 +1,4 @@
-package org.bsoftware.beagle.server.components.wrappers;
-
+package org.bsoftware.beagle.server.components;
 
 import org.bsoftware.beagle.server.dto.Dto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @version 1.0.0
  */
 @Component
-public class RestResponseEntityWrapper
+public class RestResponseEntityComponent
 {
     /**
      * Autowired HttpHeaders object
@@ -40,7 +39,7 @@ public class RestResponseEntityWrapper
      * @param httpHeaders autowired HttpHeaders object
      */
     @Autowired
-    public RestResponseEntityWrapper(HttpHeaders httpHeaders)
+    public RestResponseEntityComponent(HttpHeaders httpHeaders)
     {
         this.httpHeaders = httpHeaders;
     }
