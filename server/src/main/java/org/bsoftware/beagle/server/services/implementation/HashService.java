@@ -6,6 +6,7 @@ import org.bsoftware.beagle.server.dto.implementation.CountDto;
 import org.bsoftware.beagle.server.dto.implementation.PasswordDto;
 import org.bsoftware.beagle.server.dto.implementation.ResponseDto;
 import org.bsoftware.beagle.server.entities.implementation.HashEntity;
+import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.bsoftware.beagle.server.repositories.HashRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,15 +138,11 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
             }
             else
             {
-                // Todo: Add here exception
+                throw new WrongFileExtensionException(multipartFile.getBytes(), tika);
             }
         }
-        else
-        {
-            // Todo: Add here exception
-        }
 
-        return (T) new ResponseDto("File uploaded successfully");
+        return (T) new ResponseDto("File processed successfully");
     }
 
     /**
