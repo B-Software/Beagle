@@ -1,7 +1,7 @@
 package org.bsoftware.beagle.server.services.implementation;
 
 import org.apache.tika.Tika;
-import org.bsoftware.beagle.server.assets.DtoResponseEntityAsset;
+import org.bsoftware.beagle.server.assets.ResponseEntityWrapperAsset;
 import org.bsoftware.beagle.server.dto.implementation.CountDto;
 import org.bsoftware.beagle.server.dto.implementation.PasswordDto;
 import org.bsoftware.beagle.server.dto.implementation.ResponseDto;
@@ -88,13 +88,13 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      * @return CountDto which contain hashes count
      */
     @Override
-    public DtoResponseEntityAsset<?> get()
+    public ResponseEntityWrapperAsset<?> get()
     {
         CountDto countDto = new CountDto();
 
         countDto.setHashesCount(hashRepository.count());
 
-        return new DtoResponseEntityAsset<>(countDto, HttpStatus.OK);
+        return new ResponseEntityWrapperAsset<>(countDto, HttpStatus.OK);
     }
 
     /**
@@ -104,13 +104,13 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      * @return HashDto witch may contain password
      */
     @Override
-    public DtoResponseEntityAsset<?> get(String hash)
+    public ResponseEntityWrapperAsset<?> get(String hash)
     {
         PasswordDto passwordDto = new PasswordDto();
 
         passwordDto.setPassword(getPassword(hash.toLowerCase()));
 
-        return new DtoResponseEntityAsset<>(passwordDto, HttpStatus.OK);
+        return new ResponseEntityWrapperAsset<>(passwordDto, HttpStatus.OK);
     }
 
     /**
@@ -120,7 +120,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      * @return DtoResponseEntityComponent to controller
      */
     @Override
-    public DtoResponseEntityAsset<?> post(MultipartFile multipartFile) throws Exception
+    public ResponseEntityWrapperAsset<?> post(MultipartFile multipartFile) throws Exception
     {
         if (!multipartFile.isEmpty())
         {
@@ -134,7 +134,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
             }
         }
 
-        return new DtoResponseEntityAsset<>(new ResponseDto("File processed successfully"), HttpStatus.ACCEPTED);
+        return new ResponseEntityWrapperAsset<>(new ResponseDto("File processed successfully"), HttpStatus.ACCEPTED);
     }
 
     /**

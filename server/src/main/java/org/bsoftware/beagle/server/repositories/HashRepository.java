@@ -21,12 +21,12 @@ public interface HashRepository extends JpaRepository<HashEntity, Long>
     /**
      * Counts all rows in table
      *
-     * @return cows count
+     * @return rows count
      */
     long count();
 
     /**
-     * Finds password in database by trio and hash
+     * Finds password in database by fraction and hash
      *
      * @param fraction first 3 characters of hash
      * @param hash encrypted password

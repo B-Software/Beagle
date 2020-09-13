@@ -36,11 +36,11 @@ public class HashController
     {
         if (hash != null)
         {
-            return hashService.get(hash);
+            return hashService.get(hash).wrap();
         }
         else
         {
-            return hashService.get();
+            return hashService.get().wrap();
         }
     }
 
@@ -53,7 +53,7 @@ public class HashController
     @PostMapping
     public ResponseEntity<?> postHash(@RequestParam(value = "file") MultipartFile file) throws Exception
     {
-        return hashService.post(file);
+        return hashService.post(file).wrap();
     }
 
     /**

@@ -1,6 +1,6 @@
 package org.bsoftware.beagle.server.services;
 
-import org.bsoftware.beagle.server.assets.DtoResponseEntityAsset;
+import org.bsoftware.beagle.server.assets.ResponseEntityWrapperAsset;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -16,7 +16,7 @@ public interface Service
      *
      * @return Dto object
      */
-    default DtoResponseEntityAsset<?> get()
+    default ResponseEntityWrapperAsset<?> get()
     {
         return null;
     }
@@ -27,7 +27,7 @@ public interface Service
      * @param parameter String type parameter
      * @return Dto object
      */
-    default DtoResponseEntityAsset<?> get(String parameter)
+    default ResponseEntityWrapperAsset<?> get(String parameter)
     {
         return null;
     }
@@ -38,7 +38,7 @@ public interface Service
      * @param multipartFile data to post
      * @return Dto object
      */
-    default DtoResponseEntityAsset<?> post(MultipartFile multipartFile) throws Exception
+    default ResponseEntityWrapperAsset<?> post(MultipartFile multipartFile) throws Exception
     {
         return null;
     }
