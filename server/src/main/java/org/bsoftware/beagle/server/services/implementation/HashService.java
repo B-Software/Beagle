@@ -12,13 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.DatatypeConverter;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -53,7 +49,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
     {
         Optional<HashEntity> hashEntityOptional = hashRepository.findHashEntityByFractionAndHash(hash.substring(0, 3), hash);
 
-        return hashEntityOptional.map(HashEntity::getPassword).orElse(null);
+        return hashEntityOptional.map(hashEntity -> hashEntity.getPassword().substring(0, hashEntity.getPassword().length() - 1)).orElse(null);
     }
 
     /**
@@ -61,30 +57,29 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      *
      * @param multipartFile uploaded file
      */
+    @SuppressWarnings(value = "ResultOfMethodCallIgnored")
     private void addHashesToDatabase(MultipartFile multipartFile) throws IOException, NoSuchAlgorithmException
     {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
+        File tempFile = File.createTempFile("temp", ".txt");
         MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        List<HashEntity> hashEntityList = new ArrayList<>();
 
-        bufferedReader.lines().forEach(password ->
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
+
+        for (String password : (Iterable<String>) bufferedReader.lines()::iterator)
         {
-            if (password.length() > 16 || password.contains(" "))
+            if ((password.length() < 6 || password.length() > 16) || (password.contains(" ") || password.matches(".*[,;:].*")))
             {
-                return;
+                continue;
             }
-
             String hash = DatatypeConverter.printHexBinary(messageDigest.digest(password.getBytes())).toLowerCase();
-            HashEntity hashEntity = new HashEntity();
 
-            hashEntity.setFraction(hash.substring(0, 3));
-            hashEntity.setHash(hash);
-            hashEntity.setPassword(password);
+            bufferedWriter.write(hash.substring(0, 3) + "," + hash + "," + password);
+            bufferedWriter.newLine();
+        }
 
-            hashEntityList.add(hashEntity);
-        });
-
-        hashRepository.saveAll(hashEntityList);
+        hashRepository.loadDataLocalInfile(tempFile.getAbsolutePath());
+        tempFile.delete();
     }
 
     /**
@@ -106,16 +101,16 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
     /**
      * Trying to retrieve password from database
      *
-     * @param parameter String type parameter
+     * @param hash String type parameter
      * @param <T> generic type, which extends Dto class
      * @return HashDto witch may contain password
      */
     @Override
-    public <T extends Dto> T get(String parameter)
+    public <T extends Dto> T get(String hash)
     {
         PasswordDto passwordDto = new PasswordDto();
 
-        passwordDto.setPassword(getPassword(parameter.toLowerCase()));
+        passwordDto.setPassword(getPassword(hash.toLowerCase()));
 
         return (T) passwordDto;
     }

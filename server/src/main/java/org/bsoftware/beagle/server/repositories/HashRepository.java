@@ -2,7 +2,11 @@ package org.bsoftware.beagle.server.repositories;
 
 import org.bsoftware.beagle.server.entities.implementation.HashEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 /**
@@ -29,4 +33,14 @@ public interface HashRepository extends JpaRepository<HashEntity, Long>
      * @return Optional<HashEntity> which may contain decrypted password
      */
     Optional<HashEntity> findHashEntityByFractionAndHash(String fraction, String hash);
+
+    /**
+     * Loads data to database using load infile
+     *
+     * @param filePath path to file with data
+     */
+    @Modifying
+    @Transactional
+    @Query(value = "LOAD DATA LOCAL INFILE :filePath INTO TABLE hashes FIELDS TERMINATED BY ','", nativeQuery = true)
+    void loadDataLocalInfile(@Param("filePath") String filePath);
 }
