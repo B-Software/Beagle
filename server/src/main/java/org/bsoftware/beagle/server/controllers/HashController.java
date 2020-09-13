@@ -1,15 +1,11 @@
 package org.bsoftware.beagle.server.controllers;
 
-import org.bsoftware.beagle.server.components.RestResponseEntityComponent;
 import org.bsoftware.beagle.server.services.implementation.HashService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -30,12 +26,6 @@ public class HashController
     private final HashService hashService;
 
     /**
-     * Autowired RestResponseEntityComponent object
-     * Used as response wrapper bean, which provides Json headers automatically
-     */
-    private final RestResponseEntityComponent restResponseEntityComponent;
-
-    /**
      * Searches for password if hash specified, else shows hashes row count
      *
      * @param hash hash to find password
@@ -46,11 +36,11 @@ public class HashController
     {
         if (hash != null)
         {
-            return restResponseEntityComponent.wrap(hashService.get(hash));
+            return hashService.get(hash);
         }
         else
         {
-            return restResponseEntityComponent.wrap(hashService.get());
+            return hashService.get();
         }
     }
 
@@ -63,19 +53,17 @@ public class HashController
     @PostMapping
     public ResponseEntity<?> postHash(@RequestParam(value = "file") MultipartFile file) throws Exception
     {
-        return restResponseEntityComponent.wrap(hashService.post(file));
+        return hashService.post(file);
     }
 
     /**
      * Used for autowiring necessary objects
      *
      * @param hashService autowired passwordService object
-     * @param restResponseEntityComponent autowired RestResponseEntityComponent object
      */
     @Autowired
-    public HashController(HashService hashService, RestResponseEntityComponent restResponseEntityComponent)
+    public HashController(HashService hashService)
     {
         this.hashService = hashService;
-        this.restResponseEntityComponent = restResponseEntityComponent;
     }
 }

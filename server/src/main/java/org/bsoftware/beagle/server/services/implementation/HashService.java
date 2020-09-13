@@ -1,7 +1,7 @@
 package org.bsoftware.beagle.server.services.implementation;
 
 import org.apache.tika.Tika;
-import org.bsoftware.beagle.server.dto.Dto;
+import org.bsoftware.beagle.server.assets.DtoResponseEntityAsset;
 import org.bsoftware.beagle.server.dto.implementation.CountDto;
 import org.bsoftware.beagle.server.dto.implementation.PasswordDto;
 import org.bsoftware.beagle.server.dto.implementation.ResponseDto;
@@ -9,6 +9,7 @@ import org.bsoftware.beagle.server.entities.implementation.HashEntity;
 import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.bsoftware.beagle.server.repositories.HashRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.DatatypeConverter;
@@ -24,7 +25,6 @@ import java.util.Optional;
  * @version 1.0.0
  */
 @Service
-@SuppressWarnings(value = "unchecked")
 public class HashService implements org.bsoftware.beagle.server.services.Service
 {
     /**
@@ -85,45 +85,42 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
     /**
      * Get hashes count from table
      *
-     * @param <T> generic type, which extends Dto class
      * @return CountDto which contain hashes count
      */
     @Override
-    public <T extends Dto> T get()
+    public DtoResponseEntityAsset<?> get()
     {
         CountDto countDto = new CountDto();
 
         countDto.setHashesCount(hashRepository.count());
 
-        return (T) countDto;
+        return new DtoResponseEntityAsset<>(countDto, HttpStatus.OK);
     }
 
     /**
      * Trying to retrieve password from database
      *
      * @param hash String type parameter
-     * @param <T> generic type, which extends Dto class
      * @return HashDto witch may contain password
      */
     @Override
-    public <T extends Dto> T get(String hash)
+    public DtoResponseEntityAsset<?> get(String hash)
     {
         PasswordDto passwordDto = new PasswordDto();
 
         passwordDto.setPassword(getPassword(hash.toLowerCase()));
 
-        return (T) passwordDto;
+        return new DtoResponseEntityAsset<>(passwordDto, HttpStatus.OK);
     }
 
     /**
      * Reads file and saves all passwords from it to the database
      *
      * @param multipartFile data to post
-     * @param <T> generic type, which extends Dto class
-     * @return ResponseDto then file is valid and loaded
+     * @return DtoResponseEntityComponent to controller
      */
     @Override
-    public <T extends Dto> T post(MultipartFile multipartFile) throws Exception
+    public DtoResponseEntityAsset<?> post(MultipartFile multipartFile) throws Exception
     {
         if (!multipartFile.isEmpty())
         {
@@ -137,7 +134,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
             }
         }
 
-        return (T) new ResponseDto("File processed successfully");
+        return new DtoResponseEntityAsset<>(new ResponseDto("File processed successfully"), HttpStatus.ACCEPTED);
     }
 
     /**
