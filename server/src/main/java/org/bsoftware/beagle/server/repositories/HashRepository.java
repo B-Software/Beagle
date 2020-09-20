@@ -1,6 +1,6 @@
 package org.bsoftware.beagle.server.repositories;
 
-import org.bsoftware.beagle.server.entities.implementation.HashEntity;
+import org.bsoftware.beagle.server.entities.HashEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,7 +30,7 @@ public interface HashRepository extends JpaRepository<HashEntity, Long>
      *
      * @param fraction first 3 characters of hash
      * @param hash encrypted password
-     * @return Optional<HashEntity> which may contain decrypted password
+     * @return Optional which may contain decrypted password
      */
     Optional<HashEntity> findHashEntityByFractionAndHash(String fraction, String hash);
 

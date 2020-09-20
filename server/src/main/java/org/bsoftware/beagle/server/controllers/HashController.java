@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Size;
 
 /**
- * PasswordController displays responses from rest API
+ * HashController displays responses from rest API
  *
  * @author Rudolf Barbu
  * @version 1.0.0
@@ -20,8 +20,8 @@ import javax.validation.constraints.Size;
 public class HashController
 {
     /**
-     * Autowired InfoService object
-     * Used for getting information about server
+     * Autowired HashService object
+     * Used for working with hashes
      */
     private final HashService hashService;
 

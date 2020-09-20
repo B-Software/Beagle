@@ -4,7 +4,7 @@ import org.bsoftware.beagle.server.assets.ResponseEntityWrapperAsset;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Service interface makes to all services return dto object
+ * Service interface makes to all services ResponseEntityWrapperAsset object
  *
  * @author Rudolf Barbu
  * @version 1.0.0
@@ -14,7 +14,7 @@ public interface Service
     /**
      * Get info from the service
      *
-     * @return Dto object
+     * @return ResponseEntityWrapperAsset object
      */
     default ResponseEntityWrapperAsset<?> get()
     {
@@ -25,7 +25,7 @@ public interface Service
      * Get info from the service, for String parameter
      *
      * @param parameter String type parameter
-     * @return Dto object
+     * @return ResponseEntityWrapperAsset object
      */
     default ResponseEntityWrapperAsset<?> get(String parameter)
     {
@@ -36,7 +36,7 @@ public interface Service
      * Uploads MultipartFile to server and get the response
      *
      * @param multipartFile data to post
-     * @return Dto object
+     * @return ResponseEntityWrapperAsset object
      */
     default ResponseEntityWrapperAsset<?> post(MultipartFile multipartFile) throws Exception
     {

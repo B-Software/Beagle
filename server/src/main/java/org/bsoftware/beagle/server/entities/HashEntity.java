@@ -1,4 +1,4 @@
-package org.bsoftware.beagle.server.entities.implementation;
+package org.bsoftware.beagle.server.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "hashes")
 @IdClass(value = HashId.class)
-public class HashEntity implements org.bsoftware.beagle.server.entities.Entity
+public class HashEntity
 {
     /**
      * Trio field
@@ -35,6 +35,6 @@ public class HashEntity implements org.bsoftware.beagle.server.entities.Entity
     /**
      * Password field
      */
-    @Column(name = "password", length = 16)
+    @Column(name = "password", length = 16, nullable = false)
     private String password;
 }

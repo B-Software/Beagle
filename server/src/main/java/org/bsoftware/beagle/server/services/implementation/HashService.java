@@ -5,7 +5,7 @@ import org.bsoftware.beagle.server.assets.ResponseEntityWrapperAsset;
 import org.bsoftware.beagle.server.dto.implementation.CountDto;
 import org.bsoftware.beagle.server.dto.implementation.PasswordDto;
 import org.bsoftware.beagle.server.dto.implementation.ResponseDto;
-import org.bsoftware.beagle.server.entities.implementation.HashEntity;
+import org.bsoftware.beagle.server.entities.HashEntity;
 import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.bsoftware.beagle.server.repositories.HashRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +85,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
     /**
      * Get hashes count from table
      *
-     * @return CountDto which contain hashes count
+     * @return ResponseEntityWrapperAsset which contain hashes count
      */
     @Override
     public ResponseEntityWrapperAsset<?> get()
@@ -101,7 +101,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      * Trying to retrieve password from database
      *
      * @param hash String type parameter
-     * @return HashDto witch may contain password
+     * @return ResponseEntityWrapperAsset witch may contain password
      */
     @Override
     public ResponseEntityWrapperAsset<?> get(String hash)

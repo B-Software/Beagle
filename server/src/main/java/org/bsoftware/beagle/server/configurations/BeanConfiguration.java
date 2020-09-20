@@ -3,6 +3,7 @@ package org.bsoftware.beagle.server.configurations;
 import org.apache.tika.Tika;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * BeanConfiguration provides bean configuration for classes, which are not components
@@ -20,5 +21,14 @@ public class BeanConfiguration
     public Tika tika()
     {
         return new Tika();
+    }
+
+    /**
+     * @return BCryptPasswordEncoder object as bean
+     */
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder()
+    {
+        return new BCryptPasswordEncoder();
     }
 }
