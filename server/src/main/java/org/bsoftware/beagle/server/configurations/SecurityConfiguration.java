@@ -1,9 +1,12 @@
 package org.bsoftware.beagle.server.configurations;
 
-import org.bsoftware.beagle.server.services.implementation.UserService;
+import org.bsoftware.beagle.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -37,6 +40,33 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception
     {
         authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
+    }
+
+    /**
+     * Configures authentication builder
+     */
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception
+    {
+        httpSecurity
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST,"/api/user").hasAuthority("ROLE_ANONYMOUS")
+                .antMatchers(HttpMethod.PUT,"/api/user").hasAuthority("ROLE_ANONYMOUS")
+                .anyRequest()
+                .authenticated();
+
+        httpSecurity
+                .csrf()
+                .disable();
+    }
+
+    /**
+     * @return AuthenticationManager object as bean
+     */
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    public AuthenticationManager authenticationManager() throws Exception
+    {
+        return super.authenticationManager();
     }
 
     /**

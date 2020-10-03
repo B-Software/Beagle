@@ -1,4 +1,4 @@
-package org.bsoftware.beagle.server.services.implementation;
+package org.bsoftware.beagle.server.services;
 
 import org.apache.tika.Tika;
 import org.bsoftware.beagle.server.assets.ResponseEntityWrapperAsset;
@@ -25,7 +25,7 @@ import java.util.Optional;
  * @version 1.0.0
  */
 @Service
-public class HashService implements org.bsoftware.beagle.server.services.Service
+public class HashService
 {
     /**
      * Autowired HashRepository object
@@ -78,6 +78,9 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
             bufferedWriter.newLine();
         }
 
+        bufferedReader.close();
+        bufferedWriter.close();
+
         hashRepository.loadDataLocalInfile(tempFile.getAbsolutePath());
         tempFile.delete();
     }
@@ -87,8 +90,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      *
      * @return ResponseEntityWrapperAsset which contain hashes count
      */
-    @Override
-    public ResponseEntityWrapperAsset<?> get()
+    public ResponseEntityWrapperAsset<?> getHash()
     {
         CountDto countDto = new CountDto();
 
@@ -103,8 +105,7 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      * @param hash String type parameter
      * @return ResponseEntityWrapperAsset witch may contain password
      */
-    @Override
-    public ResponseEntityWrapperAsset<?> get(String hash)
+    public ResponseEntityWrapperAsset<?> getHash(String hash)
     {
         PasswordDto passwordDto = new PasswordDto();
 
@@ -117,10 +118,9 @@ public class HashService implements org.bsoftware.beagle.server.services.Service
      * Reads file and saves all passwords from it to the database
      *
      * @param multipartFile data to post
-     * @return DtoResponseEntityComponent to controller
+     * @return ResponseEntityWrapperAsset to controller
      */
-    @Override
-    public ResponseEntityWrapperAsset<?> post(MultipartFile multipartFile) throws Exception
+    public ResponseEntityWrapperAsset<?> putHash(MultipartFile multipartFile) throws Exception
     {
         if (!multipartFile.isEmpty())
         {

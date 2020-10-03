@@ -28,7 +28,7 @@ public class UserEntity
     /**
      * Username field
      */
-    @Column(name = "username", length = 6, nullable = false, unique = true)
+    @Column(name = "username", length = 8, nullable = false, unique = true)
     private String username;
 
     /**

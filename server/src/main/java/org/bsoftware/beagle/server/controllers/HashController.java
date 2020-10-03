@@ -1,6 +1,6 @@
 package org.bsoftware.beagle.server.controllers;
 
-import org.bsoftware.beagle.server.services.implementation.HashService;
+import org.bsoftware.beagle.server.services.HashService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,11 +36,11 @@ public class HashController
     {
         if (hash != null)
         {
-            return hashService.get(hash).wrap();
+            return hashService.getHash(hash).wrap();
         }
         else
         {
-            return hashService.get().wrap();
+            return hashService.getHash().wrap();
         }
     }
 
@@ -50,10 +50,10 @@ public class HashController
      * @param file uploading file
      * @return ResponseEntity to servlet
      */
-    @PostMapping
-    public ResponseEntity<?> postHash(@RequestParam(value = "file") MultipartFile file) throws Exception
+    @PutMapping
+    public ResponseEntity<?> putHash(@RequestParam(value = "file") MultipartFile file) throws Exception
     {
-        return hashService.post(file).wrap();
+        return hashService.putHash(file).wrap();
     }
 
     /**
