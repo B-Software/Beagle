@@ -10,6 +10,7 @@ import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.bsoftware.beagle.server.repositories.HashRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.DatatypeConverter;
@@ -86,32 +87,27 @@ public class HashService
     }
 
     /**
-     * Get hashes count from table
-     *
-     * @return ResponseEntityWrapperAsset which contain hashes count
-     */
-    public ResponseEntityWrapperAsset<?> getHash()
-    {
-        CountDto countDto = new CountDto();
-
-        countDto.setHashesCount(hashRepository.count());
-
-        return new ResponseEntityWrapperAsset<>(countDto, HttpStatus.OK);
-    }
-
-    /**
-     * Trying to retrieve password from database
+     * Trying to retrieve password from database if hash present, or hash count
      *
      * @param hash String type parameter
      * @return ResponseEntityWrapperAsset witch may contain password
      */
-    public ResponseEntityWrapperAsset<?> getHash(String hash)
+    public ResponseEntityWrapperAsset<?> getHash(@Nullable String hash)
     {
-        PasswordDto passwordDto = new PasswordDto();
+        if (hash != null)
+        {
+            PasswordDto passwordDto = new PasswordDto();
+            passwordDto.setPassword(getPassword(hash.toLowerCase()));
 
-        passwordDto.setPassword(getPassword(hash.toLowerCase()));
+            return new ResponseEntityWrapperAsset<>(passwordDto, HttpStatus.OK);
+        }
+        else
+        {
+            CountDto countDto = new CountDto();
+            countDto.setHashesCount(hashRepository.count());
 
-        return new ResponseEntityWrapperAsset<>(passwordDto, HttpStatus.OK);
+            return new ResponseEntityWrapperAsset<>(countDto, HttpStatus.OK);
+        }
     }
 
     /**

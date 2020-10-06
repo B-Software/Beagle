@@ -34,14 +34,7 @@ public class HashController
     @GetMapping(value = {"", "/{hash}"})
     public ResponseEntity<?> getHash(@PathVariable(value = "hash", required = false) @Size(min = 32, max = 32) String hash)
     {
-        if (hash != null)
-        {
-            return hashService.getHash(hash).wrap();
-        }
-        else
-        {
-            return hashService.getHash().wrap();
-        }
+        return hashService.getHash(hash).wrap();
     }
 
     /**
