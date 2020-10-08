@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
  * SecurityConfiguration used for web security configuration
@@ -32,6 +34,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
      * Used for password encryption
      */
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    /**
+     * Autowired AuthenticationEntryPoint object
+     * Used customizing unauthorized exception
+     */
+    private final AuthenticationEntryPoint authenticationEntryPoint;
+
+    /**
+     * Autowired AccessDeniedHandler object
+     * Used customizing access denied exception
+     */
+    private final AccessDeniedHandler accessDeniedHandler;
 
     /**
      * Configures authentication builder
@@ -58,6 +72,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         httpSecurity
                 .csrf()
                 .disable();
+
+        httpSecurity
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint);
+
+        httpSecurity
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler);
     }
 
     /**
@@ -74,11 +96,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
      *
      * @param userService autowired UserService object
      * @param bCryptPasswordEncoder autowired BCryptPasswordEncoder object
+     * @param authenticationEntryPoint autowired AuthenticationEntryPoint object
+     * @param accessDeniedHandler autowired AccessDeniedHandler object
      */
     @Autowired
-    public SecurityConfiguration(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder)
+    public SecurityConfiguration(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationEntryPoint authenticationEntryPoint, AccessDeniedHandler accessDeniedHandler)
     {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 }
