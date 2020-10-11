@@ -2,6 +2,7 @@ package org.bsoftware.beagle.server.handlers;
 
 import org.bsoftware.beagle.server.dto.ErrorDto;
 import org.bsoftware.beagle.server.exceptions.UserAlreadyExistsException;
+import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -32,15 +33,6 @@ public class RestControllerExceptionHandler
     }
 
     /**
-     * Handles MethodArgumentNotValidException, then it thrown
-     */
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException)
-    {
-        return new ResponseEntity<>(new ErrorDto(methodArgumentNotValidException), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    /**
      * Handles BadCredentialsException if login attempt was unsuccessful
      */
     @ExceptionHandler(value = BadCredentialsException.class)
@@ -50,12 +42,30 @@ public class RestControllerExceptionHandler
     }
 
     /**
+     * Handles MethodArgumentNotValidException, then it thrown
+     */
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException)
+    {
+        return new ResponseEntity<>(new ErrorDto(methodArgumentNotValidException), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    /**
      * Handles UserAlreadyExistsException if user already exists
      */
     @ExceptionHandler(value = UserAlreadyExistsException.class)
     public ResponseEntity<?> userAlreadyExistsExceptionHandler(UserAlreadyExistsException userAlreadyExistsException)
     {
         return new ResponseEntity<>(new ErrorDto(userAlreadyExistsException), HttpStatus.CONFLICT);
+    }
+
+    /**
+     * Handles WrongFileExtensionException if server can't process the file
+     */
+    @ExceptionHandler(value = WrongFileExtensionException.class)
+    public ResponseEntity<?> wrongFileExtensionExceptionHandler(WrongFileExtensionException wrongFileExtensionException)
+    {
+        return new ResponseEntity<>(new ErrorDto(wrongFileExtensionException), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     /**
