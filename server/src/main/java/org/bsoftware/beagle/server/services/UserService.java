@@ -1,16 +1,14 @@
 package org.bsoftware.beagle.server.services;
 
-import org.bsoftware.beagle.server.assets.ResponseEntityWrapperAsset;
-import org.bsoftware.beagle.server.dto.implementation.ResponseDto;
-import org.bsoftware.beagle.server.dto.implementation.UserDto;
+import org.bsoftware.beagle.server.dto.ResponseDto;
+import org.bsoftware.beagle.server.dto.UserDto;
 import org.bsoftware.beagle.server.entities.AuthorityEntity;
 import org.bsoftware.beagle.server.entities.UserEntity;
+import org.bsoftware.beagle.server.exceptions.UserAlreadyExistsException;
 import org.bsoftware.beagle.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -121,27 +119,20 @@ public class UserService implements UserDetailsService
      * @param httpServletRequest current request
      * @return ResponseEntityWrapperAsset with authentication result
      */
-    public ResponseEntityWrapperAsset<?> postUser(UserDto userDto, HttpServletRequest httpServletRequest)
+    public ResponseDto postUser(UserDto userDto, HttpServletRequest httpServletRequest)
     {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword());
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
 
-        try
-        {
-            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            securityContext.setAuthentication(authentication);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
 
-            HttpSession httpSession = httpServletRequest.getSession(true);
-            httpSession.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+        HttpSession httpSession = httpServletRequest.getSession(true);
+        httpSession.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
-            return new ResponseEntityWrapperAsset<>(new ResponseDto("Authenticated"), HttpStatus.OK);
-        }
-        catch (BadCredentialsException exception)
-        {
-            return new ResponseEntityWrapperAsset<>(new ResponseDto(exception.getMessage()), HttpStatus.FORBIDDEN);
-        }
+        return new ResponseDto("Authenticated");
     }
 
     /**
@@ -150,16 +141,15 @@ public class UserService implements UserDetailsService
      * @param userDto user object
      * @return ResponseEntityWrapperAsset with registration result
      */
-    public ResponseEntityWrapperAsset<?> putUser(UserDto userDto)
+    public ResponseDto putUser(UserDto userDto) throws UserAlreadyExistsException
     {
         if (userRepository.findUserEntityByUsername(userDto.getUsername()).isPresent())
         {
-            return new ResponseEntityWrapperAsset<>(new ResponseDto("User with this username already exists"), HttpStatus.CONFLICT);
+            throw new UserAlreadyExistsException("User with this username already exists");
         }
 
         userRepository.save(getUserEntity(userDto));
-
-        return new ResponseEntityWrapperAsset<>(new ResponseDto("User successfully registered"), HttpStatus.CREATED);
+        return new ResponseDto("User successfully registered");
     }
 
     /**

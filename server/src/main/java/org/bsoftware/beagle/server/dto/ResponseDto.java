@@ -1,7 +1,6 @@
-package org.bsoftware.beagle.server.dto.implementation;
+package org.bsoftware.beagle.server.dto;
 
 import lombok.Getter;
-import org.bsoftware.beagle.server.dto.Dto;
 
 /**
  * ResponseDto is a values container for presenting response info
@@ -10,7 +9,7 @@ import org.bsoftware.beagle.server.dto.Dto;
  * @version 1.0.0
  */
 @Getter
-public class ResponseDto implements Dto
+public final class ResponseDto
 {
     /**
      * Response message field

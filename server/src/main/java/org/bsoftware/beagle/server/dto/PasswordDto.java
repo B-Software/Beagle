@@ -1,8 +1,7 @@
-package org.bsoftware.beagle.server.dto.implementation;
+package org.bsoftware.beagle.server.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bsoftware.beagle.server.dto.Dto;
 
 /**
  * PasswordDto is a values container for presenting password data
@@ -12,10 +11,10 @@ import org.bsoftware.beagle.server.dto.Dto;
  */
 @Getter
 @Setter
-public class CountDto implements Dto
+public class PasswordDto
 {
     /**
-     * Hashes count field
+     * Password field
      */
-    long hashesCount;
+    private String password;
 }

@@ -1,8 +1,10 @@
 package org.bsoftware.beagle.server.controllers;
 
-import org.bsoftware.beagle.server.dto.implementation.UserDto;
+import org.bsoftware.beagle.server.dto.UserDto;
+import org.bsoftware.beagle.server.exceptions.UserAlreadyExistsException;
 import org.bsoftware.beagle.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +36,7 @@ public class UserController
     @PostMapping
     public ResponseEntity<?> postUser(@RequestBody @Valid UserDto userDto, HttpServletRequest httpServletRequest)
     {
-        return userService.postUser(userDto, httpServletRequest).wrap();
+        return new ResponseEntity<>(userService.postUser(userDto, httpServletRequest), HttpStatus.OK);
     }
 
     /**
@@ -44,9 +46,9 @@ public class UserController
      * @return ResponseEntity to servlet
      */
     @PutMapping
-    public ResponseEntity<?> putUser(@RequestBody @Valid UserDto userDto)
+    public ResponseEntity<?> putUser(@RequestBody @Valid UserDto userDto) throws UserAlreadyExistsException
     {
-        return userService.putUser(userDto).wrap();
+        return new ResponseEntity<>(userService.putUser(userDto), HttpStatus.ACCEPTED);
     }
 
     /**

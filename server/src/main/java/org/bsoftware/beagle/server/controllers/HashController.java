@@ -2,6 +2,7 @@ package org.bsoftware.beagle.server.controllers;
 
 import org.bsoftware.beagle.server.services.HashService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,15 +27,26 @@ public class HashController
     private final HashService hashService;
 
     /**
-     * Searches for password if hash specified, else shows hashes row count
+     * Shows hashes row count
+     *
+     * @return ResponseEntity to servlet
+     */
+    @GetMapping
+    public ResponseEntity<?> getHash()
+    {
+        return new ResponseEntity<>(hashService.getHash(), HttpStatus.OK);
+    }
+
+    /**
+     * Searches for password hash specified
      *
      * @param hash hash to find password
      * @return ResponseEntity to servlet
      */
-    @GetMapping(value = {"", "/{hash}"})
+    @GetMapping(value = "/{hash}")
     public ResponseEntity<?> getHash(@PathVariable(value = "hash", required = false) @Size(min = 32, max = 32) String hash)
     {
-        return hashService.getHash(hash).wrap();
+        return new ResponseEntity<>(hashService.getHash(hash), HttpStatus.OK);
     }
 
     /**
@@ -46,7 +58,7 @@ public class HashController
     @PutMapping
     public ResponseEntity<?> putHash(@RequestParam(value = "file") MultipartFile file) throws Exception
     {
-        return hashService.putHash(file).wrap();
+        return new ResponseEntity<>(hashService.putHash(file), HttpStatus.OK);
     }
 
     /**

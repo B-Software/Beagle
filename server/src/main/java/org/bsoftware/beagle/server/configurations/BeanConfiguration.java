@@ -2,7 +2,7 @@ package org.bsoftware.beagle.server.configurations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tika.Tika;
-import org.bsoftware.beagle.server.dto.implementation.ResponseDto;
+import org.bsoftware.beagle.server.dto.ErrorDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -51,7 +51,7 @@ public class BeanConfiguration
         {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            httpServletResponse.getWriter().write(new ObjectMapper().writeValueAsString(new ResponseDto("Unauthorized")));
+            httpServletResponse.getWriter().write(new ObjectMapper().writeValueAsString(new ErrorDto(authenticationException)));
         };
     }
 
@@ -65,7 +65,7 @@ public class BeanConfiguration
         {
             httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
             httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            httpServletResponse.getWriter().write(new ObjectMapper().writeValueAsString(new ResponseDto("Access Denied")));
+            httpServletResponse.getWriter().write(new ObjectMapper().writeValueAsString(new ErrorDto(accessDeniedException)));
         };
     }
 }

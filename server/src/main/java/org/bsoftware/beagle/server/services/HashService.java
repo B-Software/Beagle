@@ -1,16 +1,13 @@
 package org.bsoftware.beagle.server.services;
 
 import org.apache.tika.Tika;
-import org.bsoftware.beagle.server.assets.ResponseEntityWrapperAsset;
-import org.bsoftware.beagle.server.dto.implementation.CountDto;
-import org.bsoftware.beagle.server.dto.implementation.PasswordDto;
-import org.bsoftware.beagle.server.dto.implementation.ResponseDto;
+import org.bsoftware.beagle.server.dto.CountDto;
+import org.bsoftware.beagle.server.dto.PasswordDto;
+import org.bsoftware.beagle.server.dto.ResponseDto;
 import org.bsoftware.beagle.server.entities.HashEntity;
 import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.bsoftware.beagle.server.repositories.HashRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.DatatypeConverter;
@@ -87,27 +84,30 @@ public class HashService
     }
 
     /**
-     * Trying to retrieve password from database if hash present, or hash count
+     * Trying get hash count from database
+     *
+     * @return ResponseEntityWrapperAsset witch may contain password
+     */
+    public CountDto getHash()
+    {
+        CountDto countDto = new CountDto();
+        countDto.setHashesCount(hashRepository.count());
+
+        return countDto;
+    }
+
+    /**
+     * Trying to retrieve password from database
      *
      * @param hash String type parameter
      * @return ResponseEntityWrapperAsset witch may contain password
      */
-    public ResponseEntityWrapperAsset<?> getHash(@Nullable String hash)
+    public PasswordDto getHash(String hash)
     {
-        if (hash != null)
-        {
-            PasswordDto passwordDto = new PasswordDto();
-            passwordDto.setPassword(getPassword(hash.toLowerCase()));
+        PasswordDto passwordDto = new PasswordDto();
+        passwordDto.setPassword(getPassword(hash.toLowerCase()));
 
-            return new ResponseEntityWrapperAsset<>(passwordDto, HttpStatus.OK);
-        }
-        else
-        {
-            CountDto countDto = new CountDto();
-            countDto.setHashesCount(hashRepository.count());
-
-            return new ResponseEntityWrapperAsset<>(countDto, HttpStatus.OK);
-        }
+        return passwordDto;
     }
 
     /**
@@ -116,7 +116,7 @@ public class HashService
      * @param multipartFile data to post
      * @return ResponseEntityWrapperAsset to controller
      */
-    public ResponseEntityWrapperAsset<?> putHash(MultipartFile multipartFile) throws Exception
+    public ResponseDto putHash(MultipartFile multipartFile) throws Exception
     {
         if (!multipartFile.isEmpty())
         {
@@ -130,7 +130,7 @@ public class HashService
             }
         }
 
-        return new ResponseEntityWrapperAsset<>(new ResponseDto("File processed successfully"), HttpStatus.ACCEPTED);
+        return new ResponseDto("File processed successfully");
     }
 
     /**

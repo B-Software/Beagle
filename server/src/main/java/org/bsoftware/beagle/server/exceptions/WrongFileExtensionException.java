@@ -8,7 +8,7 @@ import org.apache.tika.Tika;
  * @author Rudolf Barbu
  * @version 1.0.0
  */
-public class WrongFileExtensionException extends Exception
+public final class WrongFileExtensionException extends Exception
 {
     /**
      * Used for exception message construction
