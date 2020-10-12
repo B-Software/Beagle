@@ -1,9 +1,11 @@
 package org.bsoftware.beagle.server.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 /**
@@ -14,6 +16,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
+@JsonIgnoreProperties(value = "password", allowSetters = true)
 public class UserDto
 {
     /**
@@ -31,4 +34,16 @@ public class UserDto
     @NotEmpty
     @Size(min = 6, max = 16)
     private String password;
+
+    /**
+     * Field that displays available checks
+     */
+    @Null
+    private Long availableChecks;
+
+    /**
+     * Field that displays user authorities
+     */
+    @Null
+    private String[] authorities;
 }

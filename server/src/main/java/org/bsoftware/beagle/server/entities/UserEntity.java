@@ -46,6 +46,6 @@ public class UserEntity
     /**
      * Field that displays user authorities
      */
-    @OneToMany(targetEntity = AuthorityEntity.class, mappedBy = "username", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = AuthorityEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AuthorityEntity> authorities;
 }

@@ -52,19 +52,37 @@ public class UserService implements UserDetailsService
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
+     * Get data about current user
+     *
+     * @return filled UserDto object
+     */
+    private UserDto fillUserDto(UserDto userDto)
+    {
+        Optional<UserEntity> userEntityOptional = userRepository.findUserEntityByUsername(userDto.getUsername());
+
+        if (userEntityOptional.isPresent())
+        {
+            userDto.setAvailableChecks(userEntityOptional.get().getAvailableChecks());
+            userDto.setAuthorities(userEntityOptional.get().getAuthorities().stream().map(AuthorityEntity::getAuthority).toArray(String[]::new));
+        }
+
+        return userDto;
+    }
+
+    /**
      * Preparing user entity for registration
      *
      * @param userDto user credentials
      * @return completed UserEntity
      */
-    private UserEntity getUserEntity(UserDto userDto)
+    private UserEntity fillUserEntity(UserDto userDto)
     {
         UserEntity userEntity = new UserEntity();
 
         userEntity.setUsername(userDto.getUsername());
         userEntity.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         userEntity.setAvailableChecks(0L);
-        userEntity.setAuthorities(Collections.singletonList(getAuthorityEntity(userDto)));
+        userEntity.setAuthorities(Collections.singletonList(fillAuthorityEntity(userDto)));
 
         return userEntity;
     }
@@ -75,7 +93,7 @@ public class UserService implements UserDetailsService
      * @param userDto user credentials
      * @return completed AuthorityEntity
      */
-    private AuthorityEntity getAuthorityEntity(UserDto userDto)
+    private AuthorityEntity fillAuthorityEntity(UserDto userDto)
     {
         AuthorityEntity authorityEntity = new AuthorityEntity();
 
@@ -119,7 +137,7 @@ public class UserService implements UserDetailsService
      * @param httpServletRequest current request
      * @return ResponseEntityWrapperAsset with authentication result
      */
-    public ResponseDto postUser(UserDto userDto, HttpServletRequest httpServletRequest)
+    public UserDto postUser(UserDto userDto, HttpServletRequest httpServletRequest)
     {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword());
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
@@ -132,7 +150,7 @@ public class UserService implements UserDetailsService
         HttpSession httpSession = httpServletRequest.getSession(true);
         httpSession.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
-        return new ResponseDto("Authenticated");
+        return fillUserDto(userDto);
     }
 
     /**
@@ -148,7 +166,7 @@ public class UserService implements UserDetailsService
             throw new UserAlreadyExistsException("User with this username already exists");
         }
 
-        userRepository.save(getUserEntity(userDto));
+        userRepository.save(fillUserEntity(userDto));
         return new ResponseDto("User successfully registered");
     }
 
