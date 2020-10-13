@@ -14,7 +14,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 
 /**
  * HashService provides information about password, and provides adding mechanisms to database
@@ -45,9 +44,14 @@ public class HashService
      */
     private String getPassword(String hash)
     {
-        Optional<HashEntity> hashEntityOptional = hashRepository.findHashEntityByFractionAndHash(hash.substring(0, 3), hash);
+        HashEntity hashEntity = hashRepository.findHashEntityByFractionAndHash(hash.substring(0, 3), hash);
 
-        return hashEntityOptional.map(hashEntity -> hashEntity.getPassword().substring(0, hashEntity.getPassword().length() - 1)).orElse(null);
+        if (hashEntity != null)
+        {
+            return hashEntity.getPassword().substring(0, hashEntity.getPassword().length() - 1);
+        }
+
+        return null;
     }
 
     /**

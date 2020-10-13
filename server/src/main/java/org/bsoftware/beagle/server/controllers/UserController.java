@@ -22,7 +22,7 @@ public class UserController
 {
     /**
      * Autowired UserService object
-     * Used for working user data
+     * Used for working with user data
      */
     private final UserService userService;
 
@@ -40,7 +40,7 @@ public class UserController
     }
 
     /**
-     * Authenticating user
+     * Registering user
      *
      * @param userDto user credentials
      * @return ResponseEntity to servlet
@@ -48,7 +48,7 @@ public class UserController
     @PutMapping
     public ResponseEntity<?> putUser(@RequestBody @Valid UserDto userDto) throws UserAlreadyExistsException
     {
-        return new ResponseEntity<>(userService.putUser(userDto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(userService.putUser(userDto), HttpStatus.CREATED);
     }
 
     /**

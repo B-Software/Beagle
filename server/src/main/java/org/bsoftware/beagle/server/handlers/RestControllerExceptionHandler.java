@@ -1,12 +1,14 @@
 package org.bsoftware.beagle.server.handlers;
 
 import org.bsoftware.beagle.server.dto.ErrorDto;
+import org.bsoftware.beagle.server.exceptions.KeyDoesNotExistsOrAlreadyActivatedException;
 import org.bsoftware.beagle.server.exceptions.UserAlreadyExistsException;
 import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,12 +53,30 @@ public class RestControllerExceptionHandler
     }
 
     /**
+     * Handles HttpMessageNotReadableException, then it thrown
+     */
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResponseEntity<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException httpMessageNotReadableException)
+    {
+        return new ResponseEntity<>(new ErrorDto(httpMessageNotReadableException), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    /**
      * Handles UserAlreadyExistsException if user already exists
      */
     @ExceptionHandler(value = UserAlreadyExistsException.class)
     public ResponseEntity<?> userAlreadyExistsExceptionHandler(UserAlreadyExistsException userAlreadyExistsException)
     {
         return new ResponseEntity<>(new ErrorDto(userAlreadyExistsException), HttpStatus.CONFLICT);
+    }
+
+    /**
+     * Handles UserAlreadyExistsException if activation key does not exists, or already activated
+     */
+    @ExceptionHandler(value = KeyDoesNotExistsOrAlreadyActivatedException.class)
+    public ResponseEntity<?> keyDoesNotExistsOrAlreadyActivatedExceptionHandler(KeyDoesNotExistsOrAlreadyActivatedException keyDoesNotExistsOrAlreadyActivatedException)
+    {
+        return new ResponseEntity<>(new ErrorDto(keyDoesNotExistsOrAlreadyActivatedException), HttpStatus.CONFLICT);
     }
 
     /**

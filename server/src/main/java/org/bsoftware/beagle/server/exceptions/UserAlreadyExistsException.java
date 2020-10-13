@@ -9,10 +9,10 @@ package org.bsoftware.beagle.server.exceptions;
 public final class UserAlreadyExistsException extends Exception
 {
     /**
-     * @param message exception message
+     * Call super class with exception message
      */
-    public UserAlreadyExistsException(String message)
+    public UserAlreadyExistsException()
     {
-        super(message);
+        super("User with this username already exists");
     }
 }

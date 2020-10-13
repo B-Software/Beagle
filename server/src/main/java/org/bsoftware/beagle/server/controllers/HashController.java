@@ -38,13 +38,13 @@ public class HashController
     }
 
     /**
-     * Searches for password hash specified
+     * Searches for password, by hash specified
      *
      * @param hash hash to find password
      * @return ResponseEntity to servlet
      */
     @GetMapping(value = "/{hash}")
-    public ResponseEntity<?> getHash(@PathVariable(value = "hash", required = false) @Size(min = 32, max = 32) String hash)
+    public ResponseEntity<?> getHash(@PathVariable(value = "hash") @Size(min = 32, max = 32) String hash)
     {
         return new ResponseEntity<>(hashService.getHash(hash), HttpStatus.OK);
     }
@@ -64,7 +64,7 @@ public class HashController
     /**
      * Used for autowiring necessary objects
      *
-     * @param hashService autowired passwordService object
+     * @param hashService autowired HashService object
      */
     @Autowired
     public HashController(HashService hashService)

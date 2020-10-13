@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     }
 
     /**
-     * Configures authentication builder
+     * Configures http security
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception

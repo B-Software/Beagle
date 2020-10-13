@@ -44,8 +44,8 @@ public class UserEntity
     private Long availableChecks;
 
     /**
-     * Field that displays user authorities
+     * Authority field
      */
-    @OneToMany(targetEntity = AuthorityEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AuthorityEntity> authorities;
+    @Column(name = "authority", length = 16, nullable = false)
+    private String authority;
 }

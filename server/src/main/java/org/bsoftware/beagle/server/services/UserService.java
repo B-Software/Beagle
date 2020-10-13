@@ -2,7 +2,6 @@ package org.bsoftware.beagle.server.services;
 
 import org.bsoftware.beagle.server.dto.ResponseDto;
 import org.bsoftware.beagle.server.dto.UserDto;
-import org.bsoftware.beagle.server.entities.AuthorityEntity;
 import org.bsoftware.beagle.server.entities.UserEntity;
 import org.bsoftware.beagle.server.exceptions.UserAlreadyExistsException;
 import org.bsoftware.beagle.server.repositories.UserRepository;
@@ -35,7 +34,7 @@ public class UserService implements UserDetailsService
 {
     /**
      * Autowired UserRepository object
-     * Used for getting information about user
+     * Used for getting user information
      */
     private final UserRepository userRepository;
 
@@ -58,12 +57,12 @@ public class UserService implements UserDetailsService
      */
     private UserDto fillUserDto(UserDto userDto)
     {
-        Optional<UserEntity> userEntityOptional = userRepository.findUserEntityByUsername(userDto.getUsername());
+        UserEntity userEntity = userRepository.findUserEntityByUsername(userDto.getUsername());
 
-        if (userEntityOptional.isPresent())
+        if (userEntity != null)
         {
-            userDto.setAvailableChecks(userEntityOptional.get().getAvailableChecks());
-            userDto.setAuthorities(userEntityOptional.get().getAuthorities().stream().map(AuthorityEntity::getAuthority).toArray(String[]::new));
+            userDto.setAvailableChecks(userEntity.getAvailableChecks());
+            userDto.setAuthority(userEntity.getAuthority());
         }
 
         return userDto;
@@ -82,25 +81,9 @@ public class UserService implements UserDetailsService
         userEntity.setUsername(userDto.getUsername());
         userEntity.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         userEntity.setAvailableChecks(0L);
-        userEntity.setAuthorities(Collections.singletonList(fillAuthorityEntity(userDto)));
+        userEntity.setAuthority("USER");
 
         return userEntity;
-    }
-
-    /**
-     * Preparing user's authorities
-     *
-     * @param userDto user credentials
-     * @return completed AuthorityEntity
-     */
-    private AuthorityEntity fillAuthorityEntity(UserDto userDto)
-    {
-        AuthorityEntity authorityEntity = new AuthorityEntity();
-
-        authorityEntity.setUsername(userDto.getUsername());
-        authorityEntity.setAuthority("USER");
-
-        return authorityEntity;
     }
 
     /**
@@ -113,15 +96,15 @@ public class UserService implements UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        Optional<UserEntity> userEntityOptional = userRepository.findUserEntityByUsername(username);
+        UserEntity userEntity = userRepository.findUserEntityByUsername(username);
 
-        if (userEntityOptional.isPresent())
+        if (userEntity != null)
         {
             return User
                     .builder()
-                    .username(userEntityOptional.get().getUsername())
-                    .password(userEntityOptional.get().getPassword())
-                    .authorities(userEntityOptional.get().getAuthorities().stream().map(AuthorityEntity::getAuthority).toArray(String[]::new))
+                    .username(userEntity.getUsername())
+                    .password(userEntity.getPassword())
+                    .authorities(userEntity.getAuthority())
                     .build();
         }
         else
@@ -161,9 +144,9 @@ public class UserService implements UserDetailsService
      */
     public ResponseDto putUser(UserDto userDto) throws UserAlreadyExistsException
     {
-        if (userRepository.findUserEntityByUsername(userDto.getUsername()).isPresent())
+        if (userRepository.findUserEntityByUsername(userDto.getUsername()) != null)
         {
-            throw new UserAlreadyExistsException("User with this username already exists");
+            throw new UserAlreadyExistsException();
         }
 
         userRepository.save(fillUserEntity(userDto));

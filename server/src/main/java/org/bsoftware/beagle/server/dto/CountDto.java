@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * PasswordDto is a values container for presenting password data
+ * PasswordDto is a values container for presenting hashes rows count data
  *
  * @author Rudolf Barbu
  * @version 1.0.0

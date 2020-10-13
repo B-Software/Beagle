@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 /**
  * HashRepository is a repository which used for finding passwords and pushing hash data to database
@@ -30,9 +29,9 @@ public interface HashRepository extends JpaRepository<HashEntity, Long>
      *
      * @param fraction first 3 characters of hash
      * @param hash encrypted password
-     * @return Optional which may contain decrypted password
+     * @return HashEntity or null if password in not present
      */
-    Optional<HashEntity> findHashEntityByFractionAndHash(String fraction, String hash);
+    HashEntity findHashEntityByFractionAndHash(String fraction, String hash);
 
     /**
      * Loads data to database using load infile
