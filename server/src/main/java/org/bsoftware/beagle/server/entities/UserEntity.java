@@ -2,7 +2,9 @@ package org.bsoftware.beagle.server.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "users")
-public class UserEntity
+public class UserEntity implements Serializable
 {
     /**
      * Id field
@@ -44,8 +46,9 @@ public class UserEntity
     private Long availableChecks;
 
     /**
-     * Authority field
+     * Field that displays user authorities
      */
-    @Column(name = "authority", length = 16, nullable = false)
-    private String authority;
+    @JoinColumn(referencedColumnName = "username", name = "username")
+    @OneToMany(targetEntity = AuthorityEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<AuthorityEntity> authorities;
 }

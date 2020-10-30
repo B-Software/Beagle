@@ -1,5 +1,6 @@
 package org.bsoftware.beagle.server.controllers;
 
+import org.bsoftware.beagle.server.exceptions.InsufficientCheckAmountException;
 import org.bsoftware.beagle.server.services.HashService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class HashController
      * @return ResponseEntity to servlet
      */
     @GetMapping(value = "/{hash}")
-    public ResponseEntity<?> getHash(@PathVariable(value = "hash") @Size(min = 32, max = 32) String hash)
+    public ResponseEntity<?> getHash(@PathVariable(value = "hash") @Size(min = 32, max = 32) String hash) throws InsufficientCheckAmountException
     {
         return new ResponseEntity<>(hashService.getHash(hash), HttpStatus.OK);
     }

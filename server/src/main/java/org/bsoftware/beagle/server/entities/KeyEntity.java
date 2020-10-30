@@ -27,7 +27,7 @@ public class KeyEntity
     /**
      * Key field
      */
-    @Column(name = "key", length = 32, nullable = false)
+    @Column(name = "key", length = 32, nullable = false, unique = true)
     private String key;
 
     /**

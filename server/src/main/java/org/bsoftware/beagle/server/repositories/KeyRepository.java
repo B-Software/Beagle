@@ -16,6 +16,7 @@ public interface KeyRepository extends JpaRepository<KeyEntity, Long>
     /**
      * Finds KeyEntity by key
      *
+     * @param key string parameter
      * @return KeyEntity if key was found
      */
     KeyEntity findKeyEntityByKey(String key);

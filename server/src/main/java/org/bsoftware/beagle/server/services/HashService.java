@@ -5,9 +5,13 @@ import org.bsoftware.beagle.server.dto.CountDto;
 import org.bsoftware.beagle.server.dto.PasswordDto;
 import org.bsoftware.beagle.server.dto.ResponseDto;
 import org.bsoftware.beagle.server.entities.HashEntity;
+import org.bsoftware.beagle.server.entities.UserEntity;
+import org.bsoftware.beagle.server.exceptions.InsufficientCheckAmountException;
 import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
 import org.bsoftware.beagle.server.repositories.HashRepository;
+import org.bsoftware.beagle.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.DatatypeConverter;
@@ -31,6 +35,12 @@ public class HashService
     private final HashRepository hashRepository;
 
     /**
+     * Autowired UserRepository object
+     * Used to communicate with database
+     */
+    private final UserRepository userRepository;
+
+    /**
      * Autowired Tika object
      * Used to determine uploaded file extension
      */
@@ -42,16 +52,28 @@ public class HashService
      * @param hash hash to get password
      * @return password from database, or null
      */
-    private String getPassword(String hash)
+    private String getPassword(String hash) throws InsufficientCheckAmountException
     {
-        HashEntity hashEntity = hashRepository.findHashEntityByFractionAndHash(hash.substring(0, 3), hash);
+        UserEntity userEntity = userRepository.findUserEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        if (hashEntity != null)
+        if (userEntity.getAvailableChecks() > 0L)
         {
-            return hashEntity.getPassword().substring(0, hashEntity.getPassword().length() - 1);
-        }
+            HashEntity hashEntity = hashRepository.findHashEntityByFractionAndHash(hash.substring(0, 3), hash);
 
-        return null;
+            if (hashEntity != null)
+            {
+                userEntity.setAvailableChecks(userEntity.getAvailableChecks() - 1L);
+                userRepository.save(userEntity);
+
+                return hashEntity.getPassword().substring(0, hashEntity.getPassword().length() - 1);
+            }
+
+            return null;
+        }
+        else
+        {
+            throw new InsufficientCheckAmountException();
+        }
     }
 
     /**
@@ -106,7 +128,7 @@ public class HashService
      * @param hash String type parameter
      * @return ResponseEntityWrapperAsset witch may contain password
      */
-    public PasswordDto getHash(String hash)
+    public PasswordDto getHash(String hash) throws InsufficientCheckAmountException
     {
         PasswordDto passwordDto = new PasswordDto();
         passwordDto.setPassword(getPassword(hash.toLowerCase()));
@@ -141,12 +163,14 @@ public class HashService
      * Used for autowiring necessary objects
      *
      * @param hashRepository autowired HashRepository object
+     * @param userRepository autowired UserRepository object
      * @param tika autowired Tika object
      */
     @Autowired
-    public HashService(HashRepository hashRepository, Tika tika)
+    public HashService(HashRepository hashRepository, UserRepository userRepository, Tika tika)
     {
         this.hashRepository = hashRepository;
+        this.userRepository = userRepository;
         this.tika = tika;
     }
 }

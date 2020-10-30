@@ -66,8 +66,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/api/user").hasAuthority("ROLE_ANONYMOUS")
                 .antMatchers(HttpMethod.PUT,"/api/user").hasAuthority("ROLE_ANONYMOUS")
-                .anyRequest()
-                .authenticated();
+                .antMatchers(HttpMethod.PUT,"/api/hash").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/key").hasAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated();
 
         httpSecurity
                 .csrf()

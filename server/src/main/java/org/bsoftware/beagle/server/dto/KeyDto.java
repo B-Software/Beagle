@@ -26,7 +26,7 @@ public class KeyDto
      * Provided checks field
      */
     @NotNull
-    @Min(value = 100000)
-    @Max(value = 1000000000)
+    @Min(value = 0)
+    @Max(value = 1000000)
     private Long providedChecks;
 }

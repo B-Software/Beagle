@@ -1,6 +1,7 @@
 package org.bsoftware.beagle.server.handlers;
 
 import org.bsoftware.beagle.server.dto.ErrorDto;
+import org.bsoftware.beagle.server.exceptions.InsufficientCheckAmountException;
 import org.bsoftware.beagle.server.exceptions.KeyDoesNotExistsOrAlreadyActivatedException;
 import org.bsoftware.beagle.server.exceptions.UserAlreadyExistsException;
 import org.bsoftware.beagle.server.exceptions.WrongFileExtensionException;
@@ -26,16 +27,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class RestControllerExceptionHandler
 {
     /**
-     * Handles NoHandlerFoundException if page not found
-     */
-    @ExceptionHandler(value = NoHandlerFoundException.class)
-    public ResponseEntity<?> noHandlerFoundExceptionHandler(NoHandlerFoundException noHandlerFoundException)
-    {
-        return new ResponseEntity<>(new ErrorDto(noHandlerFoundException), HttpStatus.NOT_FOUND);
-    }
-
-    /**
-     * Handles BadCredentialsException if login attempt was unsuccessful
+     * Handles BadCredentialsException, then it thrown
      */
     @ExceptionHandler(value = BadCredentialsException.class)
     public ResponseEntity<?> badCredentialsExceptionHandler(BadCredentialsException badCredentialsException)
@@ -44,48 +36,39 @@ public class RestControllerExceptionHandler
     }
 
     /**
-     * Handles MethodArgumentNotValidException, then it thrown
+     * Handles NoHandlerFoundException, then it thrown
      */
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException)
+    @ExceptionHandler(value = NoHandlerFoundException.class)
+    public ResponseEntity<?> noHandlerFoundExceptionHandler(NoHandlerFoundException noHandlerFoundException)
     {
-        return new ResponseEntity<>(new ErrorDto(methodArgumentNotValidException), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(new ErrorDto(noHandlerFoundException), HttpStatus.NOT_FOUND);
     }
 
     /**
-     * Handles HttpMessageNotReadableException, then it thrown
+     * Handles NoHandlerFoundException, then it thrown
      */
-    @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    public ResponseEntity<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException httpMessageNotReadableException)
+    @ExceptionHandler(value = InsufficientCheckAmountException.class)
+    public ResponseEntity<?> insufficientCheckAmountExceptionHandler(InsufficientCheckAmountException insufficientCheckAmountException)
     {
-        return new ResponseEntity<>(new ErrorDto(httpMessageNotReadableException), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(new ErrorDto(insufficientCheckAmountException), HttpStatus.LOCKED);
     }
 
     /**
-     * Handles UserAlreadyExistsException if user already exists
+     * Handles exceptions with UNPROCESSABLE_ENTITY status, then they thrown
      */
-    @ExceptionHandler(value = UserAlreadyExistsException.class)
-    public ResponseEntity<?> userAlreadyExistsExceptionHandler(UserAlreadyExistsException userAlreadyExistsException)
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, WrongFileExtensionException.class})
+    public ResponseEntity<?> unprocessableEntityExceptionHandler(Exception unprocessableEntityException)
     {
-        return new ResponseEntity<>(new ErrorDto(userAlreadyExistsException), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new ErrorDto(unprocessableEntityException), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     /**
-     * Handles UserAlreadyExistsException if activation key does not exists, or already activated
+     * Handles exceptions with CONFLICT status, then they thrown
      */
-    @ExceptionHandler(value = KeyDoesNotExistsOrAlreadyActivatedException.class)
-    public ResponseEntity<?> keyDoesNotExistsOrAlreadyActivatedExceptionHandler(KeyDoesNotExistsOrAlreadyActivatedException keyDoesNotExistsOrAlreadyActivatedException)
+    @ExceptionHandler(value = {UserAlreadyExistsException.class, KeyDoesNotExistsOrAlreadyActivatedException.class})
+    public ResponseEntity<?> conflictExceptionHandler(Exception conflictException)
     {
-        return new ResponseEntity<>(new ErrorDto(keyDoesNotExistsOrAlreadyActivatedException), HttpStatus.CONFLICT);
-    }
-
-    /**
-     * Handles WrongFileExtensionException if server can't process the file
-     */
-    @ExceptionHandler(value = WrongFileExtensionException.class)
-    public ResponseEntity<?> wrongFileExtensionExceptionHandler(WrongFileExtensionException wrongFileExtensionException)
-    {
-        return new ResponseEntity<>(new ErrorDto(wrongFileExtensionException), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(new ErrorDto(conflictException), HttpStatus.CONFLICT);
     }
 
     /**

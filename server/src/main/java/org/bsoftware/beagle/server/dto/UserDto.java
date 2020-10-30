@@ -42,8 +42,8 @@ public class UserDto
     private Long availableChecks;
 
     /**
-     * Field that displays user authority
+     * Field that displays user authorities
      */
     @Null
-    private String authority;
+    private String[] authorities;
 }
