@@ -1,7 +1,6 @@
 package org.bsoftware.beagle.server.services;
 
 import org.apache.tika.Tika;
-import org.bsoftware.beagle.server.dto.CountDto;
 import org.bsoftware.beagle.server.dto.PasswordDto;
 import org.bsoftware.beagle.server.dto.ResponseDto;
 import org.bsoftware.beagle.server.entities.HashEntity;
@@ -110,23 +109,10 @@ public class HashService
     }
 
     /**
-     * Trying get hash count from database
-     *
-     * @return ResponseEntityWrapperAsset witch may contain password
-     */
-    public CountDto getHash()
-    {
-        CountDto countDto = new CountDto();
-        countDto.setHashesCount(hashRepository.count());
-
-        return countDto;
-    }
-
-    /**
      * Trying to retrieve password from database
      *
      * @param hash String type parameter
-     * @return ResponseEntityWrapperAsset witch may contain password
+     * @return PasswordDto witch may contain password
      */
     public PasswordDto getHash(String hash) throws InsufficientCheckAmountException
     {
@@ -140,7 +126,7 @@ public class HashService
      * Reads file and saves all passwords from it to the database
      *
      * @param multipartFile data to post
-     * @return ResponseEntityWrapperAsset to controller
+     * @return ResponseDto to controller
      */
     public ResponseDto putHash(MultipartFile multipartFile) throws Exception
     {

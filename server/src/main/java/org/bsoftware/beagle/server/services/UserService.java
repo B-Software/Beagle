@@ -68,7 +68,7 @@ public class UserService implements UserDetailsService
         userEntity.setUsername(userDto.getUsername());
         userEntity.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         userEntity.setAvailableChecks(0L);
-        userEntity.setAuthorities(Collections.singletonList(getAuthorityEntity(userDto)));
+        userEntity.setAuthorities(Collections.singletonList(fillAuthorityEntity(userDto)));
 
         return userEntity;
     }
@@ -79,7 +79,7 @@ public class UserService implements UserDetailsService
      * @param userDto user credentials
      * @return completed AuthorityEntity
      */
-    private AuthorityEntity getAuthorityEntity(UserDto userDto)
+    private AuthorityEntity fillAuthorityEntity(UserDto userDto)
     {
         AuthorityEntity authorityEntity = new AuthorityEntity();
 

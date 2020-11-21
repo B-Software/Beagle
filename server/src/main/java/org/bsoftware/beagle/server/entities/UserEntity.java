@@ -2,7 +2,6 @@ package org.bsoftware.beagle.server.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -25,7 +24,7 @@ public class UserEntity implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     /**
      * Username field
@@ -43,7 +42,7 @@ public class UserEntity implements Serializable
      * Field that displays available checks
      */
     @Column(name = "available_checks", nullable = false)
-    private Long availableChecks;
+    private long availableChecks;
 
     /**
      * Field that displays user authorities
