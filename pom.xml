@@ -11,12 +11,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.4.0</version>
     </parent>
 
     <!-- project properties -->
     <properties>
-        <lombokVersion>1.18.12</lombokVersion>
+        <lombokVersion>1.18.16</lombokVersion>
     </properties>
 
     <!-- project properties -->

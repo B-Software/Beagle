@@ -14,11 +14,11 @@ public class Beagle extends Application
     /**
      * Main method of JavaFX application
      *
-     * @param primaryStage delegated stage
+     * @param stage delegated stage
      */
     @Override
-    public void start(Stage primaryStage)
+    public void start(Stage stage)
     {
-        primaryStage.show();
+        stage.show();
     }
 }

@@ -15,7 +15,7 @@
 
     <!-- module properties -->
     <properties>
-        <mySqlVersion>8.0.21</mySqlVersion>
+        <mySqlVersion>8.0.22</mySqlVersion>
         <tikaVersion>1.24.1</tikaVersion>
     </properties>
 
