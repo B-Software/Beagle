@@ -59,7 +59,7 @@ public class KeyService
     {
         KeyEntity keyEntity = keyRepository.findKeyEntityByKey(key);
 
-        if ((keyEntity != null) && !keyEntity.getActivated())
+        if ((keyEntity != null) && !keyEntity.isActivated())
         {
             UserEntity userEntity = userRepository.findUserEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 

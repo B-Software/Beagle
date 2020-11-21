@@ -22,7 +22,7 @@ public class KeyEntity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     /**
      * Key field
@@ -34,11 +34,11 @@ public class KeyEntity
      * Provided checks field
      */
     @Column(name = "provided_checks", nullable = false)
-    private Long providedChecks;
+    private long providedChecks;
 
     /**
      * Key is activated field
      */
     @Column(name = "activated", nullable = false)
-    private Boolean activated;
+    private boolean activated;
 }

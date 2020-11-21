@@ -28,17 +28,6 @@ public class HashController
     private final HashService hashService;
 
     /**
-     * Shows hashes row count
-     *
-     * @return ResponseEntity to servlet
-     */
-    @GetMapping
-    public ResponseEntity<?> getHash()
-    {
-        return new ResponseEntity<>(hashService.getHash(), HttpStatus.OK);
-    }
-
-    /**
      * Searches for password, by hash specified
      *
      * @param hash hash to find password

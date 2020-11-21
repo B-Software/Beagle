@@ -4,17 +4,22 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * PasswordDto is a values container for presenting hashes rows count data
+ * StatisticsDto is a values container for presenting server statistics
  *
  * @author Rudolf Barbu
  * @version 1.0.0
  */
 @Getter
 @Setter
-public class CountDto
+public class StatisticsDto
 {
     /**
      * Hashes count field
      */
-    long hashesCount;
+    private long usersCount;
+
+    /**
+     * Hashes count field
+     */
+    private long hashesCount;
 }
