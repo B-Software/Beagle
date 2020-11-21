@@ -16,10 +16,5 @@ public class StatisticsDto
     /**
      * Hashes count field
      */
-    private long usersCount;
-
-    /**
-     * Hashes count field
-     */
     private long hashesCount;
 }
