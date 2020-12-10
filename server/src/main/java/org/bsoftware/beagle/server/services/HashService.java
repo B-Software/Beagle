@@ -31,19 +31,22 @@ public class HashService
      * Autowired HashRepository object
      * Used to communicate with database
      */
-    private final HashRepository hashRepository;
+    @Autowired
+    private HashRepository hashRepository;
 
     /**
      * Autowired UserRepository object
      * Used to communicate with database
      */
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Autowired Tika object
      * Used to determine uploaded file extension
      */
-    private final Tika tika;
+    @Autowired
+    private Tika tika;
 
     /**
      * Returns password from database
@@ -143,20 +146,5 @@ public class HashService
         }
 
         return new ResponseDto("File processed successfully");
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param hashRepository autowired HashRepository object
-     * @param userRepository autowired UserRepository object
-     * @param tika autowired Tika object
-     */
-    @Autowired
-    public HashService(HashRepository hashRepository, UserRepository userRepository, Tika tika)
-    {
-        this.hashRepository = hashRepository;
-        this.userRepository = userRepository;
-        this.tika = tika;
     }
 }

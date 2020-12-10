@@ -2,6 +2,9 @@ package org.bsoftware.beagle.server.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@DynamicInsert
 @Table(name = "users")
 public class UserEntity implements Serializable
 {
@@ -41,6 +45,7 @@ public class UserEntity implements Serializable
     /**
      * Field that displays available checks
      */
+    @ColumnDefault(value = "0")
     @Column(name = "available_checks", nullable = false)
     private long availableChecks;
 

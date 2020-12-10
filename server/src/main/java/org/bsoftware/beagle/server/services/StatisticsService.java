@@ -1,6 +1,8 @@
 package org.bsoftware.beagle.server.services;
 
+import org.bsoftware.beagle.server.dto.HashStatisticsDto;
 import org.bsoftware.beagle.server.dto.StatisticsDto;
+import org.bsoftware.beagle.server.dto.UserStatisticsDto;
 import org.bsoftware.beagle.server.repositories.HashRepository;
 import org.bsoftware.beagle.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,46 @@ public class StatisticsService
      * Autowired HashRepository object
      * Used to communicate with database
      */
-    private final HashRepository hashRepository;
+    @Autowired
+    private HashRepository hashRepository;
+
+    /**
+     * Autowired UserRepository object
+     * Used to communicate with database
+     */
+    @Autowired
+    private UserRepository userRepository;
+
+    /**
+     * Gets hashes statistics
+     *
+     * @return filled HashStatisticsDto
+     */
+    private HashStatisticsDto getHashStatistics()
+    {
+        HashStatisticsDto hashStatisticsDto = new HashStatisticsDto();
+
+        hashStatisticsDto.setTotal(hashRepository.count());
+
+        return hashStatisticsDto;
+    }
+
+    /**
+     * Gets users statistics
+     *
+     * @return filled UserStatisticsDto
+     */
+    private UserStatisticsDto getUserStatistics()
+    {
+        UserStatisticsDto userStatisticsDto = new UserStatisticsDto();
+
+        userStatisticsDto.setTotal(userRepository.count());
+
+        int paidPercentage = (int) Math.round((((double) userRepository.countPaidUsers() / userRepository.count()) * 100));
+        userStatisticsDto.setPaidPercentage(paidPercentage);
+
+        return userStatisticsDto;
+    }
 
     /**
      * Gets server statistics
@@ -30,19 +71,9 @@ public class StatisticsService
     {
         StatisticsDto statisticsDto = new StatisticsDto();
 
-        statisticsDto.setHashesCount(hashRepository.count());
+        statisticsDto.setHashStatistics(getHashStatistics());
+        statisticsDto.setUserStatistics(getUserStatistics());
 
         return statisticsDto;
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param hashRepository autowired HashRepository object
-     */
-    @Autowired
-    public StatisticsService(HashRepository hashRepository)
-    {
-        this.hashRepository = hashRepository;
     }
 }

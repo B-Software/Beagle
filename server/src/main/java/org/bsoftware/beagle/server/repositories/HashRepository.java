@@ -18,13 +18,6 @@ import javax.transaction.Transactional;
 public interface HashRepository extends JpaRepository<HashEntity, Long>
 {
     /**
-     * Counts all rows in table
-     *
-     * @return rows count
-     */
-    long count();
-
-    /**
      * Finds password in database by fraction and hash
      *
      * @param fraction first 3 characters of hash
@@ -40,6 +33,6 @@ public interface HashRepository extends JpaRepository<HashEntity, Long>
      */
     @Modifying
     @Transactional
-    @Query(value = "LOAD DATA LOCAL INFILE :filePath INTO TABLE hashes FIELDS TERMINATED BY ','", nativeQuery = true)
+    @Query(value = "LOAD DATA LOCAL INFILE :filePath INTO TABLE `hashes` FIELDS TERMINATED BY ','", nativeQuery = true)
     void loadDataLocalInfile(@Param("filePath") String filePath);
 }

@@ -22,7 +22,8 @@ public class StatisticsController
      * Autowired StatisticsService object
      * Used for getting server statistics
      */
-    private final StatisticsService statisticsService;
+    @Autowired
+    private StatisticsService statisticsService;
 
     /**
      * Get server statistics
@@ -33,16 +34,5 @@ public class StatisticsController
     public ResponseEntity<?> getStatistics()
     {
         return new ResponseEntity<>(statisticsService.getStatistics(), HttpStatus.OK);
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param statisticsService autowired StatisticsService object
-     */
-    @Autowired
-    public StatisticsController(StatisticsService statisticsService)
-    {
-        this.statisticsService = statisticsService;
     }
 }

@@ -19,7 +19,8 @@ public class ServletComponent implements WebServerFactoryCustomizer<TomcatServle
      * Autowired Environment object
      * Used for get values from property file
      */
-    private final Environment environment;
+    @Autowired
+    private Environment environment;
 
     /**
      * Customizes port of application
@@ -33,16 +34,5 @@ public class ServletComponent implements WebServerFactoryCustomizer<TomcatServle
 
         tomcatServletWebServerFactory
                 .setPort((applicationPort != null && !applicationPort.isEmpty()) ? Integer.parseInt(applicationPort) : Beagle.DEFAULT_PORT);
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param environment autowired Environment object
-     */
-    @Autowired
-    public ServletComponent(Environment environment)
-    {
-        this.environment = environment;
     }
 }

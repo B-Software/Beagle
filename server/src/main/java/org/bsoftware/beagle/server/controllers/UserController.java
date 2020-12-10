@@ -26,7 +26,8 @@ public class UserController
      * Autowired UserService object
      * Used for working with user data
      */
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     /**
      * Logout user
@@ -64,16 +65,5 @@ public class UserController
     public ResponseEntity<?> putUser(@RequestBody @Valid UserDto userDto) throws UserAlreadyExistsException
     {
         return new ResponseEntity<>(userService.putUser(userDto), HttpStatus.CREATED);
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param userService autowired UserService object
-     */
-    @Autowired
-    public UserController(UserService userService)
-    {
-        this.userService = userService;
     }
 }

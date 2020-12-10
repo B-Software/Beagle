@@ -25,7 +25,8 @@ public class HashController
      * Autowired HashService object
      * Used for working with hashes
      */
-    private final HashService hashService;
+    @Autowired
+    private HashService hashService;
 
     /**
      * Searches for password, by hash specified
@@ -49,16 +50,5 @@ public class HashController
     public ResponseEntity<?> putHash(@RequestParam(value = "file") MultipartFile file) throws Exception
     {
         return new ResponseEntity<>(hashService.putHash(file), HttpStatus.OK);
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param hashService autowired HashService object
-     */
-    @Autowired
-    public HashController(HashService hashService)
-    {
-        this.hashService = hashService;
     }
 }

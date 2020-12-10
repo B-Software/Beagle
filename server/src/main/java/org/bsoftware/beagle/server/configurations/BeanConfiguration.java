@@ -36,7 +36,8 @@ public class BeanConfiguration
      * Autowired Environment object
      * Used for get values from property file
      */
-    private final Environment environment;
+    @Autowired
+    private Environment environment;
 
     /**
      * @return Tika object as bean
@@ -132,16 +133,5 @@ public class BeanConfiguration
         multipartProperties.setMaxRequestSize(DataSize.ofMegabytes(1024));
 
         return multipartProperties;
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param environment autowired Environment object
-     */
-    @Autowired
-    public BeanConfiguration(Environment environment)
-    {
-        this.environment = environment;
     }
 }

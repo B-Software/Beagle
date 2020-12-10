@@ -14,7 +14,12 @@ import lombok.Setter;
 public class StatisticsDto
 {
     /**
-     * Hashes count field
+     * Hash statistics dto field
      */
-    private long hashesCount;
+    private HashStatisticsDto hashStatistics;
+
+    /**
+     * User statistics dto field
+     */
+    private UserStatisticsDto userStatistics;
 }

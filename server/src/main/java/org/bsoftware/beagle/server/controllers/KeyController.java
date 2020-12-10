@@ -27,7 +27,8 @@ public class KeyController
      * Autowired HashService object
      * Used for working with keys
      */
-    private final KeyService keyService;
+    @Autowired
+    private KeyService keyService;
 
     /**
      * Activates key
@@ -51,16 +52,5 @@ public class KeyController
     public ResponseEntity<?> putKey(@RequestBody @Valid List<KeyDto> keyDtoList)
     {
         return new ResponseEntity<>(keyService.putKey(keyDtoList), HttpStatus.CREATED);
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param keyService autowired KeyService object
-     */
-    @Autowired
-    public KeyController(KeyService keyService)
-    {
-        this.keyService = keyService;
     }
 }

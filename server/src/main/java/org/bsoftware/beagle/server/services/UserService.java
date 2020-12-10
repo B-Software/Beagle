@@ -41,19 +41,23 @@ public class UserService implements UserDetailsService
      * Autowired UserRepository object
      * Used for getting user information
      */
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Autowired AuthenticationManager object
      * Used for user authentication
      */
-    private final AuthenticationManager authenticationManager;
+    @Lazy
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     /**
      * Autowired BCryptPasswordEncoder object
      * Used for password encryption
      */
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * Preparing user entity for registration
@@ -67,7 +71,6 @@ public class UserService implements UserDetailsService
 
         userEntity.setUsername(userDto.getUsername());
         userEntity.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-        userEntity.setAvailableChecks(0L);
         userEntity.setAuthorities(Collections.singletonList(fillAuthorityEntity(userDto)));
 
         return userEntity;
@@ -84,7 +87,6 @@ public class UserService implements UserDetailsService
         AuthorityEntity authorityEntity = new AuthorityEntity();
 
         authorityEntity.setUsername(userDto.getUsername());
-        authorityEntity.setAuthority("ROLE_USER");
 
         return authorityEntity;
     }
@@ -194,20 +196,5 @@ public class UserService implements UserDetailsService
 
         userRepository.save(fillUserEntity(userDto));
         return new ResponseDto("User successfully registered");
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param userRepository autowired UserRepository object
-     * @param authenticationManager autowired AuthenticationManager object
-     * @param bCryptPasswordEncoder autowired BCryptPasswordEncoder object
-     */
-    @Autowired
-    public UserService(UserRepository userRepository, @Lazy AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder)
-    {
-        this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 }

@@ -27,25 +27,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
      * Autowired UserService object
      * Used for getting user information
      */
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     /**
      * Autowired BCryptPasswordEncoder object
      * Used for password encryption
      */
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * Autowired AuthenticationEntryPoint object
      * Used customizing unauthorized exception
      */
-    private final AuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
 
     /**
      * Autowired AccessDeniedHandler object
      * Used customizing access denied exception
      */
-    private final AccessDeniedHandler accessDeniedHandler;
+    @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
 
     /**
      * Configures authentication builder
@@ -64,6 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     {
         httpSecurity
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET,"/api/statistics").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/user").hasAuthority("ROLE_ANONYMOUS")
                 .antMatchers(HttpMethod.PUT,"/api/user").hasAuthority("ROLE_ANONYMOUS")
                 .antMatchers(HttpMethod.PUT,"/api/hash").hasAuthority("ROLE_ADMIN")
@@ -90,22 +95,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     public AuthenticationManager authenticationManager() throws Exception
     {
         return super.authenticationManager();
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param userService autowired UserService object
-     * @param bCryptPasswordEncoder autowired BCryptPasswordEncoder object
-     * @param authenticationEntryPoint autowired AuthenticationEntryPoint object
-     * @param accessDeniedHandler autowired AccessDeniedHandler object
-     */
-    @Autowired
-    public SecurityConfiguration(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationEntryPoint authenticationEntryPoint, AccessDeniedHandler accessDeniedHandler)
-    {
-        this.userService = userService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.accessDeniedHandler = accessDeniedHandler;
-        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 }

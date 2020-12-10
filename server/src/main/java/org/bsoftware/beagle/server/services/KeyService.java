@@ -25,13 +25,15 @@ public class KeyService
      * Autowired KeyRepository object
      * Used for getting key information
      */
-    private final KeyRepository keyRepository;
+    @Autowired
+    private KeyRepository keyRepository;
 
     /**
      * Autowired UserRepository object
      * Used for getting user information
      */
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Fills key entity
@@ -95,18 +97,5 @@ public class KeyService
         });
 
         return new ResponseDto("Keys added successfully");
-    }
-
-    /**
-     * Used for autowiring necessary objects
-     *
-     * @param keyRepository autowired KeyRepository object
-     * @param userRepository autowired UserRepository object
-     */
-    @Autowired
-    public KeyService(KeyRepository keyRepository, UserRepository userRepository)
-    {
-        this.keyRepository = keyRepository;
-        this.userRepository = userRepository;
     }
 }
